@@ -86,11 +86,12 @@ class Cynosure_Material_Data_Set
 		$this->categories = get_terms('media-category');
 		$this->product_treatments = array();
 		$this->treatment_categories = array();
+		$this->product_categories = array();
 		$this->subcategories = array();
 		$this->materials = array();
 
 		$this->get_product_treatments();
-
+		$this->get_product_categories();
 
 	}
 
@@ -148,6 +149,24 @@ class Cynosure_Material_Data_Set
 				if($categories_query->have_posts()) {
 
 					array_push($this->treatment_categories, $category);
+				}
+			}
+
+		}
+
+	}
+
+	function get_product_categories() {
+
+		foreach($this->categories as $category) {
+
+			if($category->parent == 0) {
+				$categories_media_query = new Cynosure_Media_Query(array('criteria' => array('media-product' => $this->product, 'media-category' => $category->slug)));
+				$categories_query = $categories_media_query->runQuery();
+
+				if($categories_query->have_posts()) {
+
+					array_push($this->product_categories, $category);
 				}
 			}
 
